@@ -1,0 +1,143 @@
+﻿.search-bar{
+    margin-top: 30px;
+    text-align: left;
+    padding-left: 100px;
+
+}
+.search-bar h4 p{
+    font-family: "Jost", sans-serif;
+}
+.search-bar p{
+    font-style: italic;
+}
+.input-search {
+    display: flex;
+    /*justify-content: center;*/
+
+}
+.input-search input {
+    width: 50%;
+    background-color: #fff;
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 0px 0px 0 #041E42, 0 2px 10px 0 #041E42;
+    padding: 20px 10px;
+    font-size: 14px;
+}
+
+.input-search button {
+    width: 20%;
+    background-color: #041E42;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 0px 0px 0 #041E42, 0 2px 10px 0 #041E42;
+    font-size: 12px;
+}
+
+/*slider 1*/
+.slider-1 {
+    margin-top: 20px;
+    background-color: #E5E7E9;
+}
+
+.slider-1 h5 {
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    color: #383838;
+    text-transform: uppercase;
+    font-size: 15px;
+    letter-spacing: 3px;
+    z-index: 5;
+    position: relative;
+}
+
+
+.slider-1 p {
+    text-align: right;
+}
+
+.slider-1 p a {
+    text-decoration: none;
+    font-family: "Jost", sans-serif;
+    color: #53bb53;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.carousel {
+    padding: 10px 0 0;
+}
+
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+    display: flex;
+}
+
+.carousel .card-body h4 a {
+    text-decoration: none;
+    color: #191919;
+
+}
+
+.carousel .card-body h4 {
+
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    font-weight: 600;
+    font-size: 25px;
+    padding: 20px;
+}
+
+@media(min-width:768px) {
+
+    .carousel-inner .carousel-item-end.active,
+    .carousel-inner .carousel-item-next {
+        transform: translateX(25%);
+    }
+
+    .carousel-inner .carousel-item-end.active,
+    .carousel-inner .carousel-item-prev {
+        transform: translateX(-25%);
+    }
+}
+
+.carousel-inner .carousel-item-end,
+.carousel-inner .carousel-item-start {
+    transform: translateX(0);
+}
+
+
+/*section-below*/
+
+.section-below{
+    margin-top: 30px;
+}
+
+.section-below .card{
+    padding: 45px 30px 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 0%;
+    border-top: 3px solid #041E42;
+}
+
+/*search-list*/
+.search-list{
+    margin-top: 30px;
+}
+
+/*.search-list .list-group .btn-checkout{*/
+/*    font-family: "Jost", sans-serif!important;*/
+/*    font-size: 17px!important;*/
+/*    color: #fff!important;*/
+/*    padding: 14px 33px 16px!important;*/
+/*    background-color: #53bb53!important;*/
+/*    border-radius: 55px!important;*/
+/*    font-weight: bold!important;*/
+/*    display: inline-block!important;*/
+/*    max-width: 160px!important;*/
+/*    margin: 0 auto!important;*/
+/*    margin-top: 35px!important;*/
+/*    text-decoration: none!important;*/
+/*}*/

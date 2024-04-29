@@ -1,7 +1,274 @@
 ﻿@page "/"
+@using ILLMS.models
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
+<section>
+    <div class="container">
+        <div class="search-bar">
+            <h4>Search the library with QuickSearch</h4>
+            <p>Find the books, artifacts</p>
+            <div class="input-search">
+                <input type="text" placeholder="Enter keywords, author, title, identifiers" @bind=@SearchTerm name="search">
+                <button  @onclick="Search" class="button-subscribe"><i></i>SEARCH</button>
+            </div>
+        </div>
+    </div>
+</section>
+@if (showSearchList)
+{
+    <section class="search-list">
+        <div class="container">
+            <div class="list-group">
+                @foreach (Book book in searchResults)
+                {   
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <b>Title:</b> @book.title <br>
+                        <b>Author:</b> @book.author <br>
+                        <b>Category:</b> @book.category <br>
+                        <b>Availability:</b> @book.availability <br>
+                        @if (@book.availability)
+                        {
+                            <button class="btn alert-primary w-25">Checkout Book</button>
+                        }
+                    </a>
+                }
 
-<h1>Hello, world!</h1>
+            </div>
+        </div>
+    </section>
+}
+<section class="slider-1">
+    <div class="container">
+        <div class="carousel" data-bs-ride="carousel" id="carouselExample">
+            <div class="carousel-inner">
+                <div class="carousel-item active" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/a.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/b.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/c.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/e.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/d.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/b.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/d.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/e.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/d.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/c.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item" id="carouselExample">
+                    <div class="col-md-1">
+                        <div class="card-body">
+                            <img src="images/e.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
 
-Welcome to your new app.
+            </div>
+            <button class="carousel-control-prev" data-bs-target="#carouselExample" type="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" data-bs-target="#carouselExample" type="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+</section>
+<section class="section-below">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <h4>Weekly News</h4>
+                    <p>ILLMS Library Week Activity</p>
+                    <p>ILLMS Library Week Activity</p>
+                    <p>ILLMS Library Week Activity</p>
+                    <p>ILLMS Library Week Activity</p>
+                    <p>ILLMS Library Week Activity</p>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h4>Library Hours</h4>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Upcoming Events</h4>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Computer Services</h4>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                            <p>ILLMS Library Week Activity</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var items = document.querySelectorAll('.carousel .carousel-item');
+    console.log("item1 ", items);
+    items.forEach((e) =>
+    {
+        const slide = items.length;
+        let next = e.nextElementSibling;
+        for (var i = 0; i <= slide; i++)
+        {
+
+            if (!next)
+            {
+                next = items[0];
+            }
+            let clonechild = next.cloneNode(true);
+            e.appendChild(clonechild.children[0]);
+            next = next.nextElementSibling;
+
+        }
+    })
+    $('.carousel').carousel({
+        interval: 2000
+    })
+    $('.carousel').on('slid.bs.carousel', function (e)
+    {
+    console.log(e)
+    if (e.from == 3)
+        {
+            $('.carousel').carousel(0)
+
+        }
+        e.preventDefault()
+
+    })
+</script>
+
+@code
+{
+    List<Book> books = new List<Book>();
+    bool showSearchList = false;
+    public string SearchTerm { get; set; } = string.Empty;
+    List<Book> searchResults;
+    
+    private void Search()
+    {
+        searchResults = new List<Book>();
+        foreach (Book book in books )
+        {
+            if (book.title.IndexOf(SearchTerm, StringComparison.OrdinalIgnoreCase) >= 0
+                || book.author.IndexOf(SearchTerm, StringComparison.OrdinalIgnoreCase) >= 0 
+                || book.category.IndexOf(SearchTerm, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                searchResults.Add(book);
+                Console.WriteLine(book.title);
+            }
+        }
+
+        showSearchList = true;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        books.Add(new Book("Clean Code: A Handbook of Agile Software Craftsmanship", "Robert C. Martin", "Software Engineering", true));
+        books.Add(new Book("Design Patterns: Elements of Reusable Object-Oriented Software", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides", "Software Engineering", true));
+        books.Add(new Book("Refactoring: Improving the Design of Existing Code", "Martin Fowler", "Software Engineering", false));
+        books.Add(new Book("Code Complete: A Practical Handbook of Software Construction", "Steve McConnell", "Software Engineering", true));
+        books.Add(new Book("The Pragmatic Programmer: Your Journey to Mastery", "Andrew Hunt, David Thomas", "Software Engineering", true));
+        books.Add(new Book("Domain-Driven Design: Tackling Complexity in the Heart of Software", "Eric Evans", "Software Engineering", true));
+        books.Add(new Book("Clean Architecture: A Craftsman's Guide to Software Structure and Design", "Robert C. Martin", "Software Engineering", true));
+        books.Add(new Book("Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation", "Jez Humble, David Farley", "Software Engineering", true));
+        books.Add(new Book("The Mythical Man-Month: Essays on Software Engineering", "Frederick P. Brooks Jr.", "Software Engineering", true));
+        books.Add(new Book("Agile Estimating and Planning", "Mike Cohn", "Software Engineering", true));
+        books.Add(new Book("Extreme Programming Explained: Embrace Change", "Kent Beck", "Software Engineering", true));
+        books.Add(new Book("Test Driven Development: By Example", "Kent Beck", "Software Engineering", true));
+        books.Add(new Book("Introduction to the Theory of Computation", "Michael Sipser", "Computer Science", true));
+        books.Add(new Book("Structure and Interpretation of Computer Programs", "Harold Abelson, Gerald Jay Sussman", "Computer Science", true));
+        books.Add(new Book("Clean Agile: Back to Basics", "Robert C. Martin", "Agile Development", true));
+        books.Add(new Book("Head First Design Patterns", "Eric Freeman, Elisabeth Robson, Bert Bates, Kathy Sierra", "Software Engineering", true));
+        books.Add(new Book("Agile Software Development, Principles, Patterns, and Practices", "Robert C. Martin", "Software Engineering", true));
+        books.Add(new Book("Software Engineering: A Practitioner's Approach", "Roger S. Pressman", "Software Engineering", true));
+        books.Add(new Book("The Clean Coder: A Code of Conduct for Professional Programmers", "Robert C. Martin", "Software Engineering", true));
+        books.Add(new Book("Domain-Driven Design Distilled", "Vaughn Vernon", "Software Engineering", true));
+        books.Add(new Book("Implementing Domain-Driven Design", "Vaughn Vernon", "Software Engineering", true));
+        books.Add(new Book("Software Architecture in Practice", "Len Bass, Paul Clements, Rick Kazman", "Software Engineering", true));
+        books.Add(new Book("Head First Software Development", "Dan Pilone, Russ Miles", "Software Engineering", true));
+        books.Add(new Book("Software Engineering at Google: Lessons Learned from Programming Over Time", "Titus Winters, Tom Manshreck, Hyrum Wright", "Software Engineering", true));
+        books.Add(new Book("The DevOps Handbook: How to Create World-Class Agility, Reliability, and Security in Technology Organizations", "Gene Kim, Patrick Debois, John Willis, Jez Humble", "DevOps", true));
+ 
+    }
+
+}
+
+
