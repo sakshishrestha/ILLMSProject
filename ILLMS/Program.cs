@@ -1,5 +1,6 @@
 using ILLMS.Components;
 using ILLMS.service;
+using ILLMS.controller;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<DBService>();
+builder.Services.AddSingleton<RegisteredUserHandler>();
+builder.Services.AddSingleton<ManageRolesController>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
