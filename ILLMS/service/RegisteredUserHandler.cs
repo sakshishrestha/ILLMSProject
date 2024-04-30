@@ -21,12 +21,7 @@ namespace ILLMS.service
         {
             users.Add(user);
         }
-
-        // Read
-        // public List<RegisteredUser> GetAllUsers()
-        // {
-        //     return users;
-        // }
+        
         
         public List<RegisteredUser> GetAllUsers(bool isRegistered = true)
         {
@@ -40,10 +35,6 @@ namespace ILLMS.service
             }
         }
 
-        public RegisteredUser GetUserByUsername(string username)
-        {
-            return users.FirstOrDefault(u => u.Username == username);
-        }
 
         // Update
         public void UpdateUser(RegisteredUser updatedUser)
