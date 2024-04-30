@@ -1,7 +1,22 @@
-﻿<div class="navbar">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@code {
+private bool IsAuthenticated;
+
+protected override async Task OnInitializedAsync()
+{
+var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+IsAuthenticated = authState.User.Identity.IsAuthenticated;
+}
+}
+
+<div class="navbar">
     <div class="navbar-logo">
         <a href="/"><img src="images/ILLMS_logo.png" alt="">Library Management System</a>
     </div>
+    @if (IsAuthenticated)
+    {
     <div class="navbar-right">
         <div class="dropdown">
             <a href="#" class="dropbtn">Services</a>
@@ -14,15 +29,30 @@
         </div>
         <div class="dropdown">
             <a href="#" class="dropbtn">Research</a>
-
+        </div>
+    </div>
+    }
+    else
+    {
+    <div class="navbar-right">
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Services</a>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">About</a>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Academics</a>
+        </div>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">Research</a>
         </div>
         <div class="dropdown">
             <a href="/register" class="dropbtn">Register</a>
-
         </div>
         <div class="dropdown">
             <a href="/login" class="dropbtn">Login</a>
-
         </div>
     </div>
+    }
 </div>

@@ -115,4 +115,21 @@ public class DBService
     {
         return users.FirstOrDefault(b => String.Equals(b.email, email) && String.Equals(b.password, password));
     }
+
+    public User Login(string email, string password)
+    {
+        return users.FirstOrDefault(u => u.email == email && u.password == password);
+    }   
+    
+    // register new user
+    public void RegisterUser(User user)
+    {
+        // Generate unique user ID
+        user.userId = users.Count + 1;
+
+        // Add user to list of users
+        users.Add(user);
+    }
+
+    
 }
