@@ -6,10 +6,7 @@
 @rendermode InteractiveServer
 <PageTitle>Checkout Detail</PageTitle>
 
-@if (showSpinner)
-{
-    <img src="images/lg.gif">
-}
+
 @if (!showCheckoutDetail)
 {
     @if (book != null)
@@ -73,16 +70,17 @@ public string id { get; set; }
 Book book;
 CheckoutDetail checkoutDetail;
 bool showCheckoutDetail = false;
-bool showSpinner = false;
+// bool showSpinner = false;
 
 protected override async Task OnInitializedAsync()
-{   showSpinner = true;
+{
+// showSpinner = true;
     book = dbService.GetBookById(int.Parse(id));
-    if (book.fromLoanlibrary)
-    {
-        Thread.Sleep(2000);
-        showSpinner = false;
-    }
+    // if (book.fromLoanlibrary)
+    // {
+    //     Thread.Sleep(2000);
+    //     showSpinner = false;
+    // }
  
 }
 
