@@ -1,19 +1,97 @@
-@page "/checkout"
+@page "/checkout/{id}"
 @using ILLMS.models
+@using ILLMS.service
+@inject DBService dbService
+@using Microsoft.AspNetCore.Components.Routing
 @rendermode InteractiveServer
-
 <PageTitle>Checkout Detail</PageTitle>
 
-<section class="checkout-detail">
-    <div class="container">
-        <div class="card" style="width: 100%;">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
+@if (showSpinner)
+{
+    <img src="images/lg.gif">
+}
+@if (!showCheckoutDetail)
+{
+    @if (book != null)
+    {
+    
+        <section class="checkout-detail">
+            <div class="container">
+                <div class="card" style="width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title">@book.title (@book.bookId)</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@book.author</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">@book.category</h6>
+                        @if (@book.fromLoanlibrary)
+                        {
+                            <h6 class="card-subtitle mb-2 text-muted">Loan from External Library</h6>
+                        }
+                        else
+                        {
+                            <h6 class="card-subtitle mb-2 text-muted">Loan from ILLMS Library </h6>
+                        }
+                        <button @onclick="confirmCheckout" class="btn alert-primary">Confirm Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </section> 
+    }
+    else
+    {
+        <p>Something went wrong.</p>
+    }
+}
+
+
+@if (showCheckoutDetail)
+{
+    <section>
+        <div class="container">
+            <div class="card" style="width: 25rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Checkout Id: @checkoutDetail.checkoutId</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Book Id: @checkoutDetail.bookId</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Book Title: @book.title</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">User Email: @checkoutDetail.email</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Checkout Date: @checkoutDetail.checkoutDate</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Return Date: @checkoutDetail.returnDate</h6>
+                    
+                    @* <button @onclick="confirmCheckout" class="btn alert-primary">Back</button> *@
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    
+    </section>  
+}
+
+
+@code
+{
+[Parameter]
+public string id { get; set; }
+
+Book book;
+CheckoutDetail checkoutDetail;
+bool showCheckoutDetail = false;
+bool showSpinner = false;
+
+protected override async Task OnInitializedAsync()
+{   showSpinner = true;
+    book = dbService.GetBookById(int.Parse(id));
+    if (book.fromLoanlibrary)
+    {
+        Thread.Sleep(2000);
+        showSpinner = false;
+    }
+ 
+}
+
+private void confirmCheckout()
+{
+    int checkoutId = new Random().Next();
+    User user = dbService.getCurrentUser();
+    checkoutDetail = new CheckoutDetail(checkoutId,user.email , book.bookId, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now).AddDays(30));
+    dbService.CheckoutBook(checkoutDetail);
+    showCheckoutDetail = true;
+}
+}

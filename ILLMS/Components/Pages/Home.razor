@@ -2,6 +2,7 @@
 @using ILLMS.models
 @using ILLMS.service
 @inject DBService dbService
+@inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
@@ -59,8 +60,14 @@
                     <h6 class="card-subtitle mb-2 text-muted">@selectedBook.author</h6>
                     <h6 class="card-subtitle mb-2 text-muted">@selectedBook.category</h6>
                     <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    
-                    <button class="btn alert-primary">Checkout Book</button>
+                    @if (!selectedBook.fromLoanlibrary)
+                    {
+                        <button @onclick="() => navigateCheckout(selectedBook)" class="btn alert-primary">Checkout Book</button>
+                    }
+                    else
+                    {
+                        <button @onclick="() => navigateCheckout(selectedBook)" class="btn alert-primary">Request Loan Library</button>
+                    }
                 </div>
             </div>
         </div>
@@ -278,11 +285,18 @@
 
     }
 
-   
+    private void navigateCheckout(Book book)
+    {
+        
+        int id = book.bookId;
+        navigationManager.NavigateTo($"/checkout/{id}", true);
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        books = dbService.GetAllBooks(); 
+        books = dbService.GetAllBooks();
+        User user = dbService.GetUserByEmailPassword("johndoe@etsu.edu", "password");
+        dbService.setCurrentUser(user);
 
     }
 
