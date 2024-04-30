@@ -1,5 +1,7 @@
 ﻿@page "/"
 @using ILLMS.models
+@using ILLMS.service
+@inject DBService dbService
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
@@ -17,23 +19,49 @@
 </section>
 @if (showSearchList)
 {
+   
     <section class="search-list">
-        <div class="container">
-            <div class="list-group">
-                @foreach (Book book in searchResults)
-                {   
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <b>Title:</b> @book.title <br>
-                        <b>Author:</b> @book.author <br>
-                        <b>Category:</b> @book.category <br>
-                        <b>Availability:</b> @book.availability <br>
-                        @if (@book.availability)
-                        {
-                            <button class="btn alert-primary w-25">Checkout Book</button>
-                        }
-                    </a>
-                }
+         @if (searchResults.Count == 0)
+            {
+                <p style="text-align: center;">Search not found </p>
+            }
+            
+            <div class="container">
+                <div class="list-group">
+                    @foreach (Book book in searchResults)
+                    {
+                        <a @onclick="() => showBookDetail(book)" class="list-group-item list-group-item-action">
+                            <b>Title:</b> @book.title <br>
+                            <b>Author:</b> @book.author <br>
+                            <b>Category:</b> @book.category <br>
+                            @if (@book.fromLoanlibrary)
+                            {
+                                <p style="color: red; font-weight: 600;">Request for Loan</p>
+                            }
+                            @if (!@book.fromLoanlibrary)
+                            {
+                                <p style="color: green; font-weight: 600;">Available at ILLMS</p>
+                            }
+                        </a>
+                    }
 
+                </div>
+            </div>
+    </section>
+}
+@if (bookDetail)
+{
+    <section class="bookDetail"  style="margin-top: 30px;">
+        <div class="container">
+            <div class="card" style="width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">@selectedBook.title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@selectedBook.author</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">@selectedBook.category</h6>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    
+                    <button class="btn alert-primary">Checkout Book</button>
+                </div>
             </div>
         </div>
     </section>
@@ -239,34 +267,23 @@
 
         showSearchList = true;
     }
+
+    bool bookDetail = false;
+    Book selectedBook;
+    private void showBookDetail(Book book)
+    {
+        showSearchList = false;
+        bookDetail = true;
+        selectedBook = book;
+
+    }
+
+   
+
     protected override async Task OnInitializedAsync()
     {
-        books.Add(new Book("Clean Code: A Handbook of Agile Software Craftsmanship", "Robert C. Martin", "Software Engineering", true));
-        books.Add(new Book("Design Patterns: Elements of Reusable Object-Oriented Software", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides", "Software Engineering", true));
-        books.Add(new Book("Refactoring: Improving the Design of Existing Code", "Martin Fowler", "Software Engineering", false));
-        books.Add(new Book("Code Complete: A Practical Handbook of Software Construction", "Steve McConnell", "Software Engineering", true));
-        books.Add(new Book("The Pragmatic Programmer: Your Journey to Mastery", "Andrew Hunt, David Thomas", "Software Engineering", true));
-        books.Add(new Book("Domain-Driven Design: Tackling Complexity in the Heart of Software", "Eric Evans", "Software Engineering", true));
-        books.Add(new Book("Clean Architecture: A Craftsman's Guide to Software Structure and Design", "Robert C. Martin", "Software Engineering", true));
-        books.Add(new Book("Continuous Delivery: Reliable Software Releases through Build, Test, and Deployment Automation", "Jez Humble, David Farley", "Software Engineering", true));
-        books.Add(new Book("The Mythical Man-Month: Essays on Software Engineering", "Frederick P. Brooks Jr.", "Software Engineering", true));
-        books.Add(new Book("Agile Estimating and Planning", "Mike Cohn", "Software Engineering", true));
-        books.Add(new Book("Extreme Programming Explained: Embrace Change", "Kent Beck", "Software Engineering", true));
-        books.Add(new Book("Test Driven Development: By Example", "Kent Beck", "Software Engineering", true));
-        books.Add(new Book("Introduction to the Theory of Computation", "Michael Sipser", "Computer Science", true));
-        books.Add(new Book("Structure and Interpretation of Computer Programs", "Harold Abelson, Gerald Jay Sussman", "Computer Science", true));
-        books.Add(new Book("Clean Agile: Back to Basics", "Robert C. Martin", "Agile Development", true));
-        books.Add(new Book("Head First Design Patterns", "Eric Freeman, Elisabeth Robson, Bert Bates, Kathy Sierra", "Software Engineering", true));
-        books.Add(new Book("Agile Software Development, Principles, Patterns, and Practices", "Robert C. Martin", "Software Engineering", true));
-        books.Add(new Book("Software Engineering: A Practitioner's Approach", "Roger S. Pressman", "Software Engineering", true));
-        books.Add(new Book("The Clean Coder: A Code of Conduct for Professional Programmers", "Robert C. Martin", "Software Engineering", true));
-        books.Add(new Book("Domain-Driven Design Distilled", "Vaughn Vernon", "Software Engineering", true));
-        books.Add(new Book("Implementing Domain-Driven Design", "Vaughn Vernon", "Software Engineering", true));
-        books.Add(new Book("Software Architecture in Practice", "Len Bass, Paul Clements, Rick Kazman", "Software Engineering", true));
-        books.Add(new Book("Head First Software Development", "Dan Pilone, Russ Miles", "Software Engineering", true));
-        books.Add(new Book("Software Engineering at Google: Lessons Learned from Programming Over Time", "Titus Winters, Tom Manshreck, Hyrum Wright", "Software Engineering", true));
-        books.Add(new Book("The DevOps Handbook: How to Create World-Class Agility, Reliability, and Security in Technology Organizations", "Gene Kim, Patrick Debois, John Willis, Jez Humble", "DevOps", true));
- 
+        books = dbService.GetAllBooks(); 
+
     }
 
 }
