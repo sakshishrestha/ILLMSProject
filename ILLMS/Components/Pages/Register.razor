@@ -1,7 +1,9 @@
 @page "/register"
 @using ILLMS.models;
 @using ILLMS.service
-@inject DBService dbService
+@inject ArtifactRepository ArtifactRepository
+@inject UserRepository userRepository
+
 @inject NavigationManager Navigation
 
 <PageTitle>Register</PageTitle>
@@ -73,7 +75,7 @@ string lastName = names.Length > 1 ? names[1] : string.Empty;
 
 // Add user to database
 var newUser = new User { firstName = firstName, lastName = lastName, email = email, password = password };
-dbService.RegisterUser(newUser);
+userRepository.RegisterUser(newUser);
 
 // Redirect to login page or any other page
 Navigation.NavigateTo("/login");

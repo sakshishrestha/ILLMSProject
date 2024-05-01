@@ -1,5 +1,5 @@
 ﻿@using ILLMS.service
-@inject DBService DbService
+@inject UserRepository userRepository
 
 <!-- Navigation menu markup -->
 
@@ -39,7 +39,7 @@
             <div class="dropdown">
                 <a href="#" class="dropbtn">Research</a>
             </div>
-            @if (!DbService.getIsUserLoggedIn())
+            @if (!userRepository.getIsUserLoggedIn())
             {
                 <div class="dropdown">
                     <a href="/register" class="dropbtn">Register</a>
@@ -51,7 +51,7 @@
             else
             {
                 <div class="dropdown">
-                    <a href="#" class="dropbtn">@DbService.getCurrentUser().email</a>
+                    <a href="#" class="dropbtn">@userRepository.getCurrentUser().email</a>
                 </div> 
             }
             

@@ -1,7 +1,9 @@
 @page "/login"
 @using ILLMS.models
 @using ILLMS.service
-@inject DBService dbService
+@inject ArtifactRepository ArtifactRepository
+@inject UserRepository userRepository
+
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
@@ -54,7 +56,7 @@
     private async Task LoginUserAsync()
     {
         errorMessage = null;
-        var user = await dbService.Login(email, password);
+        var user = await userRepository.Login(email, password);
         if (user == null)
         {
             // Handle login failure
@@ -67,7 +69,7 @@
         else
         {
             // Redirect to home page after successful login
-            dbService.setIsUserLoggedIn(true);
+            userRepository.setIsUserLoggedIn(true);
             Navigation.NavigateTo("/");
             // await JSRuntime.InvokeVoidAsync("window.location.assign", "/");
 

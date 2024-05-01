@@ -5,20 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class DBService
+public class ArtifactRepository
 {
     private List<Book> books = new List<Book>();
-    private List<User> users = new List<User>();
+  
     private List<CheckoutDetail> _checkouts = new List<CheckoutDetail>();
     private int _bookIdCounter = 1;
     private int _checkoutIdCounter = 1;
-    private  User currentUser;
-    private bool isUserLoggedIn = false;
+    
 
     // Add some initial data for demonstration
-    public DBService()
+    public ArtifactRepository()
     {
-        users.Add(new User(1, "johndoe@etsu.edu", "password"));
         books.Add(new Book(1, "Clean Code: A Handbook of Agile Software Craftsmanship", "Robert C. Martin", "Software Engineering", true, true));
         books.Add(new Book(2, "The Pragmatic Programmer: Your Journey to Mastery", "Andrew Hunt, David Thomas", "Software Engineering", true, false));
         books.Add(new Book(3, "Design Patterns: Elements of Reusable Object-Oriented Software", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides", "Software Engineering", true, true));
@@ -101,45 +99,6 @@ public class DBService
         return _checkouts;
     }
 
-    public User getCurrentUser()
-    {
-        User user = this.currentUser;
-        return user;
-    }
-
-    public  void setIsUserLoggedIn(bool isUserLoggedIn)
-    {
-        this.isUserLoggedIn = isUserLoggedIn;
-    }
-    
-    public bool getIsUserLoggedIn()
-    {
-        return isUserLoggedIn;
-    }
-
-    public  void setCurrentUser(User user)
-    {
-        this.currentUser = user;
-    }
-    
-    public User GetUserByEmailPassword(string email, string password)
-    {
-        return users.FirstOrDefault(b => String.Equals(b.email, email) && String.Equals(b.password, password));
-    }
-
-    public async Task<User> Login(string email, string password)
-    {
-        return await Task.Run(() => users.FirstOrDefault(u => u.email == email && u.password == password));
-    }
-    // register new user
-    public void RegisterUser(User user)
-    {
-        // Generate unique user ID
-        user.userId = users.Count + 1;
-
-        // Add user to list of users
-        users.Add(user);
-    }
-
+  
     
 }

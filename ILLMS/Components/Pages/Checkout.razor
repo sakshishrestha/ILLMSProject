@@ -1,8 +1,12 @@
 @page "/checkout/{id}"
 @using ILLMS.models
 @using ILLMS.service
-@inject DBService dbService
+@inject ArtifactRepository ArtifactRepository
+@inject UserRepository userRepository
+@inject IJSRuntime JsRuntime
+
 @using Microsoft.AspNetCore.Components.Routing
+@using System.Security.Principal
 @rendermode InteractiveServer
 <PageTitle>Checkout Detail</PageTitle>
 
@@ -44,6 +48,9 @@
 {
     <section>
         <div class="container">
+            <div>
+                <h1 style="text-align: center; font-size: 20px; margin-top: 30px; color: green;">Your book is checked out successfully.</h1>
+            </div>
             <div class="card" style="width: 25rem;">
                 <div class="card-body">
                     <h5 class="card-title">Checkout Id: @checkoutDetail.checkoutId</h5>
@@ -52,12 +59,13 @@
                     <h6 class="card-subtitle mb-2 text-muted">User Email: @checkoutDetail.email</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Checkout Date: @checkoutDetail.checkoutDate</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Return Date: @checkoutDetail.returnDate</h6>
-                    
+                    <h6 class="card-subtitle mb-2 text-muted">Location: ETSU Sherrod Library </h6>
+
                     @* <button @onclick="confirmCheckout" class="btn alert-primary">Back</button> *@
                 </div>
             </div>
         </div>
-    
+        
     </section>  
 }
 
@@ -70,26 +78,27 @@ public string id { get; set; }
 Book book;
 CheckoutDetail checkoutDetail;
 bool showCheckoutDetail = false;
-// bool showSpinner = false;
+bool showSpinner = false;
 
 protected override async Task OnInitializedAsync()
 {
-// showSpinner = true;
-    book = dbService.GetBookById(int.Parse(id));
-    // if (book.fromLoanlibrary)
-    // {
-    //     Thread.Sleep(2000);
-    //     showSpinner = false;
-    // }
+    book = ArtifactRepository.GetBookById(int.Parse(id));
+    if (book.fromLoanlibrary)
+    {
+       Thread.Sleep(3000);
+       //call third party
+        showSpinner = false;
+        
+    }
  
 }
 
 private void confirmCheckout()
-{
+{   
     int checkoutId = new Random().Next();
-    User user = dbService.getCurrentUser();
+    User user = userRepository.getCurrentUser();
     checkoutDetail = new CheckoutDetail(checkoutId,user.email , book.bookId, DateOnly.FromDateTime(DateTime.Now), DateOnly.FromDateTime(DateTime.Now).AddDays(30));
-    dbService.CheckoutBook(checkoutDetail);
+    ArtifactRepository.CheckoutBook(checkoutDetail);
     showCheckoutDetail = true;
 }
 }
