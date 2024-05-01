@@ -3,7 +3,6 @@
 @using ILLMS.service
 @inject DBService dbService
 @inject NavigationManager Navigation
-@inject Microsoft.JSInterop.IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <PageTitle>Login</PageTitle>
@@ -11,7 +10,7 @@
 <section class="login">
     <div class="container">
         <div class="login-form">
-            <div class="form" @onclick="LoginUser">
+            <div class="form" @onclick="ClearErrorMessage">
                 <!-- Email input -->
                 <div class="card" style="width: 27rem; text-align:center;">
                     <h5>Log In</h5>
@@ -25,7 +24,7 @@
                     </div>
 
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary btn-block mb-4" @onclick="LoginUser">Log In</button>                    
+                    <button type="submit" class="btn btn-primary btn-block mb-4" @onclick="@(() => LoginUserAsync())">Log In</button>                    
                     <!-- Error message -->
                     @if (!string.IsNullOrEmpty(errorMessage))
                     {
@@ -41,22 +40,36 @@
     private string email;
     private string password;
     private string errorMessage;
-    
-    private async Task LoginUser()
+
+    protected override void OnInitialized()
     {
-        var user = dbService.Login(email, password);
-        if (user != null)
-        {
-            // Redirect to home page after successful login
-            // Navigation.NavigateTo("https://localhost:5000/");
-            await JSRuntime.InvokeVoidAsync("window.location.assign", "/");
-        }
-        else
+        ClearErrorMessage();
+    }
+
+    private void ClearErrorMessage()
+    {
+        errorMessage = null;
+    }
+
+    private async Task LoginUserAsync()
+    {
+        errorMessage = null;
+        var user = await dbService.Login(email, password);
+        if (user == null)
         {
             // Handle login failure
             // For simplicity, display an error message here
             // You can also show a toast notification or redirect to a login error page
             Console.WriteLine("Login failed. Invalid email or password.");
+            errorMessage = "Invalid email or password.";
+
+        }
+        else
+        {
+            // Redirect to home page after successful login
+            Navigation.NavigateTo("/");
+            // await JSRuntime.InvokeVoidAsync("window.location.assign", "/");
+
         }
     }
 }

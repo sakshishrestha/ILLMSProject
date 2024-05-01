@@ -116,11 +116,10 @@ public class DBService
         return users.FirstOrDefault(b => String.Equals(b.email, email) && String.Equals(b.password, password));
     }
 
-    public User Login(string email, string password)
+    public async Task<User> Login(string email, string password)
     {
-        return users.FirstOrDefault(u => u.email == email && u.password == password);
-    }   
-    
+        return await Task.Run(() => users.FirstOrDefault(u => u.email == email && u.password == password));
+    }
     // register new user
     public void RegisterUser(User user)
     {
