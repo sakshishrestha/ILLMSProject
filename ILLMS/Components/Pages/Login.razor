@@ -67,6 +67,7 @@
         else
         {
             // Redirect to home page after successful login
+            dbService.setIsUserLoggedIn(true);
             Navigation.NavigateTo("/");
             // await JSRuntime.InvokeVoidAsync("window.location.assign", "/");
 

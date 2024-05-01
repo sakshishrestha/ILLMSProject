@@ -1,40 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
-@inject AuthenticationStateProvider AuthenticationStateProvider
-
-@code {
-    private bool IsAuthenticated;
-    private bool IsLoading;
-
-    protected override async Task OnInitializedAsync()
-    { 
-        await UpdateAuthenticationState();
-        // Subscribe to authentication state changes
-        AuthenticationStateProvider.AuthenticationStateChanged += HandleAuthenticationStateChanged;
-    }
-
-    private async Task UpdateAuthenticationState(AuthenticationState authState = null)
-    {
-        IsLoading = true;
-        if (authState == null)
-        {
-            authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        }
-        Console.WriteLine(" Check Here:");
-        Console.WriteLine(IsAuthenticated);
-        IsAuthenticated = authState.User.Identity.IsAuthenticated;
-        IsLoading = false;
-        Console.WriteLine($"IsAuthenticated: {IsAuthenticated}, IsLoading: {IsLoading}");
-        StateHasChanged(); // Notify Blazor to re-render the component
-    }
-
-    // Handle authentication state changes
-    private async void HandleAuthenticationStateChanged(Task<AuthenticationState> authenticationStateTask)
-    {
-        Console.WriteLine("Authentication state changed");
-        var authenticationState = await authenticationStateTask;
-        await UpdateAuthenticationState(authenticationState);
-    }
-}
+﻿@using ILLMS.service
+@inject DBService DbService
 
 <!-- Navigation menu markup -->
 
@@ -42,16 +7,26 @@
     <div class="navbar-logo">
         <a href="/"><img src="images/ILLMS_logo.png" alt="">Library Management System</a>
     </div>
-    @if (IsLoading)
-    {
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    }
-    @IsAuthenticated
-    @if (IsAuthenticated)
-    {
-        <div class="navbar-right">
+    
+        @* <div class="spinner-border text-primary" role="status"> *@
+        @*     <span class="visually-hidden">Loading...</span> *@
+        @* </div> *@
+        @* *@
+        @* <div class="navbar-right"> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">Services</a> *@
+        @*     </div> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">About</a> *@
+        @*     </div> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">Academics</a> *@
+        @*     </div> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">Research</a> *@
+        @*     </div> *@
+        @* </div> *@
+     <div class="navbar-right">
             <div class="dropdown">
                 <a href="#" class="dropbtn">Services</a>
             </div>
@@ -64,29 +39,23 @@
             <div class="dropdown">
                 <a href="#" class="dropbtn">Research</a>
             </div>
+            @if (!DbService.getIsUserLoggedIn())
+            {
+                <div class="dropdown">
+                    <a href="/register" class="dropbtn">Register</a>
+                </div>
+                <div class="dropdown">
+                    <a href="/login" class="dropbtn">Login</a>
+                </div>  
+            }
+            else
+            {
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">@DbService.getCurrentUser().email</a>
+                </div> 
+            }
+            
         </div>
-    }
-    else
-    {
-        <div class="navbar-right">
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Services</a>
-            </div>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">About</a>
-            </div>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Academics</a>
-            </div>
-            <div class="dropdown">
-                <a href="#" class="dropbtn">Research</a>
-            </div>
-            <div class="dropdown">
-                <a href="/register" class="dropbtn">Register</a>
-            </div>
-            <div class="dropdown">
-                <a href="/login" class="dropbtn">Login</a>
-            </div>
-        </div>
-    }
+    
 </div>
+

@@ -13,6 +13,7 @@ public class DBService
     private int _bookIdCounter = 1;
     private int _checkoutIdCounter = 1;
     private  User currentUser;
+    private bool isUserLoggedIn = false;
 
     // Add some initial data for demonstration
     public DBService()
@@ -106,10 +107,20 @@ public class DBService
         return user;
     }
 
+    public  void setIsUserLoggedIn(bool isUserLoggedIn)
+    {
+        this.isUserLoggedIn = isUserLoggedIn;
+    }
+    
+    public bool getIsUserLoggedIn()
+    {
+        return isUserLoggedIn;
+    }
+
     public  void setCurrentUser(User user)
     {
         this.currentUser = user;
-    } 
+    }
     
     public User GetUserByEmailPassword(string email, string password)
     {
