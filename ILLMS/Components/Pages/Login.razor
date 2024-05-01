@@ -1,60 +1,78 @@
 @page "/login"
+@using ILLMS.models
+@using ILLMS.service
+@inject ArtifactRepository ArtifactRepository
+@inject UserRepository userRepository
+
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
 <PageTitle>Login</PageTitle>
 
 <section class="login">
     <div class="container">
         <div class="login-form">
-                <form class="form">
+            <div class="form" @onclick="ClearErrorMessage">
                 <!-- Email input -->
                 <div class="card" style="width: 27rem; text-align:center;">
                     <h5>Log In</h5>
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <input type="email" id="form1Example1" class="form-control" placeholder="Email address" />
-                           
-                        </div>
-
-                        <!-- Password input -->
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <input type="password" id="form2Example2" class="form-control" placeholder="Password" />
-                           
-                        </div>
-
-                        <!-- 2 column grid layout for inline styling -->
-                        <div class="row mb-4">
-                            <div class="col d-flex justify-content-center">
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                                <label class="form-check-label" for="form2Example31"> Remember me </label>
-                            </div>
-                            </div>
-
-                            <div class="col">
-                            <!-- Simple link -->
-                            <a href="#!">Forgot password?</a>
-                            </div>
-                        </div>
-
-                        <!-- Submit button -->
-                        <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Log In</button>
-
-                        <!-- Register buttons -->
-                        <div class="text-center">
-                            <p>Not a member? <a href="#!">Register</a></p>
-                            <p>or sign up with:</p>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-facebook-f">Facebook</i>
-                            </button>
-
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-google">Google</i>
-                            </button>
-                        </div>
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="email" id="email" @bind="email" class="form-control" placeholder="Email address" />
                     </div>
-                
-                </form>
+
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="password" id="password" @bind="password" class="form-control" placeholder="Password" />
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block mb-4" @onclick="@(() => LoginUserAsync())">Log In</button>                    
+                    <!-- Error message -->
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">@errorMessage</div>
+                    }                    
+                </div>
+            </div>
         </div>
-
     </div>
-
 </section>
+
+@code {
+    private string email;
+    private string password;
+    private string errorMessage;
+
+    protected override void OnInitialized()
+    {
+        ClearErrorMessage();
+    }
+
+    private void ClearErrorMessage()
+    {
+        errorMessage = null;
+    }
+
+    private async Task LoginUserAsync()
+    {
+        errorMessage = null;
+        var user = await userRepository.Login(email, password);
+        if (user == null)
+        {
+            // Handle login failure
+            // For simplicity, display an error message here
+            // You can also show a toast notification or redirect to a login error page
+            Console.WriteLine("Login failed. Invalid email or password.");
+            errorMessage = "Invalid email or password.";
+
+        }
+        else
+        {
+            // Redirect to home page after successful login
+            userRepository.setIsUserLoggedIn(true);
+            Navigation.NavigateTo("/");
+            // await JSRuntime.InvokeVoidAsync("window.location.assign", "/");
+
+        }
+    }
+}

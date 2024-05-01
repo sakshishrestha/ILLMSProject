@@ -1,28 +1,62 @@
-﻿<div class="navbar">
+﻿@using ILLMS.service
+@inject UserRepository userRepository
+
+<!-- Navigation menu markup -->
+
+<div class="navbar">
     <div class="navbar-logo">
         <a href="/"><img src="images/ILLMS_logo.png" alt="">Library Management System</a>
     </div>
-    <div class="navbar-right">
-        <div class="dropdown">
-            <a href="#" class="dropbtn">Services</a>
+    
+        @* <div class="spinner-border text-primary" role="status"> *@
+        @*     <span class="visually-hidden">Loading...</span> *@
+        @* </div> *@
+        @* *@
+        @* <div class="navbar-right"> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">Services</a> *@
+        @*     </div> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">About</a> *@
+        @*     </div> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">Academics</a> *@
+        @*     </div> *@
+        @*     <div class="dropdown"> *@
+        @*         <a href="#" class="dropbtn">Research</a> *@
+        @*     </div> *@
+        @* </div> *@
+     <div class="navbar-right">
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Services</a>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">About</a>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Academics</a>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Research</a>
+            </div>
+            @if (!userRepository.getIsUserLoggedIn())
+            {
+                <div class="dropdown">
+                    <a href="/register" class="dropbtn">Register</a>
+                </div>
+                <div class="dropdown">
+                    <a href="/login" class="dropbtn">Login</a>
+                </div>  
+            }
+            else
+            {
+                <div class="dropdown">
+                    <a href="#" class="dropbtn">@userRepository.getCurrentUser().email</a>
+                </div> 
+            }
+            
         </div>
-        <div class="dropdown">
-            <a href="#" class="dropbtn">About</a>
-        </div>
-        <div class="dropdown">
-            <a href="#" class="dropbtn">Academics</a>
-        </div>
-        <div class="dropdown">
-            <a href="#" class="dropbtn">Research</a>
-
-        </div>
-        <div class="dropdown">
-            <a href="/register" class="dropbtn">Register</a>
-
-        </div>
-        <div class="dropdown">
-            <a href="/login" class="dropbtn">Login</a>
-
-        </div>
-    </div>
+    
 </div>
+
+

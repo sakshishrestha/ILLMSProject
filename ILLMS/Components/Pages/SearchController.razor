@@ -1,8 +1,9 @@
 ﻿@page "/"
 @using ILLMS.models
 @using ILLMS.service
-@inject DBService dbService
+@inject ArtifactRepository ArtifactRepository
 @inject NavigationManager navigationManager
+@inject UserRepository userRepository
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
@@ -20,7 +21,6 @@
 </section>
 @if (showSearchList)
 {
-   
     <section class="search-list">
          @if (searchResults.Count == 0)
             {
@@ -294,9 +294,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        books = dbService.GetAllBooks();
-        User user = dbService.GetUserByEmailPassword("johndoe@etsu.edu", "password");
-        dbService.setCurrentUser(user);
+        books = ArtifactRepository.GetAllBooks();
+        User user = userRepository.GetUserByEmailPassword("johndoe@etsu.edu", "password");
+        userRepository.setCurrentUser(user);
 
     }
 

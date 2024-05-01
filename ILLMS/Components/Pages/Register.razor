@@ -1,71 +1,83 @@
 @page "/register"
+@using ILLMS.models;
+@using ILLMS.service
+@inject ArtifactRepository ArtifactRepository
+@inject UserRepository userRepository
+
+@inject NavigationManager Navigation
+
 <PageTitle>Register</PageTitle>
 
 <section class="login">
     <div class="container">
         <div class="login-form">
-                <form class="form">
-                <!-- Email input -->
+            <form class="form" @onsubmit="RegisterUser">
+                <!-- Name input -->
                 <div class="card" style="width: 27rem; text-align:center;">
                     <h5>Register</h5>
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <input type="text" id="form1Example1" class="form-control" placeholder="Enter your Name" />
-                           
-                        </div>
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <input type="email" id="form1Example1" class="form-control" placeholder="Email your Email" />
-                           
-                        </div>
-
-                        <!-- Password input -->
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <input type="password" id="form2Example2" class="form-control" placeholder="Enter Password" />
-                           
-                        </div>
-                        <div data-mdb-input-init class="form-outline mb-3">
-                            <input type="password" id="form2Example2" class="form-control" placeholder="Re-enter Password" />
-                           
-                        </div>
-
-                        <!-- 2 column grid layout for inline styling -->
-                        <div class="row mb-4">
-                            <div class="col d-flex justify-content-center">
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                                <label class="form-check-label" for="form2Example31"> Remember me </label>
-                            </div>
-                            </div>
-
-                            <div class="col">
-                            <!-- Simple link -->
-                            <a href="#!">Forgot password?</a>
-                            </div>
-                        </div>
-
-                        <!-- Submit button -->
-                        <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Register</button>
-
-                        <!-- Register buttons -->
-                        <div class="text-center">
-                            <p>Not a member? <a href="#!">Register</a></p>
-                            <p>or sign up with:</p>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-facebook-f">Facebook</i>
-                            </button>
-
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-google">Google</i>
-                            </button>
-                        </div>
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="text" @bind="name" class="form-control" placeholder="Enter your Name" />
                     </div>
-                
-                </form>
+
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="email" @bind="email" class="form-control" placeholder="Email your Email" />
+                    </div>
+
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="password" @bind="password" class="form-control" placeholder="Enter Password" />
+                    </div>
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="password" @bind="confirmPassword" class="form-control" placeholder="Re-enter Password" />
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block mb-4">Register</button>
+
+                    <!-- Error message -->
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                    <div class="alert alert-danger" role="alert">@errorMessage</div>
+                    }
+                </div>
+            </form>
         </div>
-
-
     </div>
-
 </section>
 
+@code {
+private string name;
+private string email;
+private string password;
+private string confirmPassword;
+private string errorMessage;
 
+private async Task RegisterUser()
+{
+// Validate input
+if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+{
+errorMessage = "Please fill in all fields.";
+return;
+}
+
+if (password != confirmPassword)
+{
+errorMessage = "Passwords do not match.";
+return;
+}
+
+// Split the name into first name and last name
+string[] names = name.Split(' ');
+string firstName = names.Length > 0 ? names[0] : string.Empty;
+string lastName = names.Length > 1 ? names[1] : string.Empty;
+
+// Add user to database
+var newUser = new User { firstName = firstName, lastName = lastName, email = email, password = password };
+userRepository.RegisterUser(newUser);
+
+// Redirect to login page or any other page
+Navigation.NavigateTo("/login");
+}
+}
